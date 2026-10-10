@@ -1,0 +1,13 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "mody",
+  "description": "Máté Módos's personal Claude Code plugins.",
+  "owner": { "name": "Máté Módos" },
+  "plugins": [
+    {
+      "name": "mody",
+      "description": "Personal workflow skills: product launch prep and more.",
+      "source": "./"
+    }
+  ]
+}
