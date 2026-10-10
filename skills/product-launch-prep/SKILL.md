@@ -1,7 +1,7 @@
 ---
 name: product-launch-prep
 description: Principal-engineer launch-readiness review of the current repo. Creates a work branch, runs eight review phases in parallel (over-engineering, code quality, simplification, security, performance, documentation, observability, shipping), and writes prioritized, actionable findings plus a go/no-go verdict into docs/product-launch-prep/. Use whenever the user is preparing a product, service, or major release for launch or production — "prepare for launch", "are we ready to ship", "launch readiness", "production readiness review", "pre-release audit", "go-live checklist for this repo" — even if they don't name the skill. Not for reviewing a single PR or diff; use a normal code review for that.
-argument-hint: "[mode=report|fix] [since=<git-ref>] [only=<phases>] [skip=<phases>] [out=<dir>] [branch=<name>]"
+argument-hint: "[mode=report|fix] [since=<git-ref>] [only=<phases>] [skip=<phases>] [out=<dir>] [branch=<name>] [rerun=full|verify]"
 ---
 
 # Product launch prep
@@ -18,9 +18,10 @@ All optional, parsed from the free-text arguments:
 |---|---|---|
 | `mode` | ask at start | `report`: no code changes outside the output folder. `fix`: also apply safe fixes (defined in report-format.md) as uncommitted changes. |
 | `since` | none (whole repo) | Review only what changed since this ref (a tag, a commit, `origin/main`). Use it for re-launches and big releases. |
-| `only` / `skip` | all phases | Comma-separated phase keys from the table below, e.g. `only=security,performance`. |
+| `only` / `skip` | all phases | Comma-separated phase keys from the table below, e.g. `only=security,performance`. If `only` and `skip` are both given, `only` wins and `skip` is ignored; note this under Method in README.md. If any key is not in the phase table, stop and list the valid keys before launching any subagent. |
 | `out` | `docs/product-launch-prep` | Output folder, relative to the repo root. |
 | `branch` | `feature/product-launch-prep` | Work branch name. |
+| `rerun` | ask on a rerun | Only applies when a previous run exists. `full`: re-check old findings and look for new ones. `verify`: only check whether the existing findings are resolved; no new review. Much faster, use it to track progress between full runs. |
 
 ## Working style
 
@@ -39,7 +40,7 @@ If either is missing, continue without it and note it under Method in README.md.
    - *Report only*: findings only, the codebase stays untouched.
    - *Report + safe fixes*: also apply low-risk fixes on the branch, left uncommitted for review.
 
-   If the output folder already contains a previous run, ask in the same question whether to overwrite it or write to `<out>/<YYYY-MM-DD>/`.
+   If the output folder already contains a previous run (`<out>/00-context.md` exists), this is a **rerun**: the package is updated in place, not overwritten. Old findings are re-checked and marked `done` when fixed, and the next steps are refreshed with what is still waiting. Tell the user this in the same message, and if `rerun` wasn't given, ask in the same question: *Full rerun* (re-check old findings and look for new ones) or *Verify only* (just check whether the existing findings are resolved).
 4. **Create the branch** from the up-to-date default branch:
    ```bash
    git fetch origin --quiet || true
@@ -53,7 +54,7 @@ If either is missing, continue without it and note it under Method in README.md.
 
 Write `<out>/00-context.md`. Every phase subagent starts by reading this file, so it is what lets them skip rediscovering the basics and spend their effort on the review. Include:
 
-- **Snapshot**: date, base ref and commit SHA, branch, mode, scope (whole repo or `since`).
+- **Snapshot**: date, base ref and commit SHA, branch, mode, scope (whole repo or `since`). On a rerun, also the previous run's date and SHA and the last *full* run's date and SHA, read from the old `00-context.md` before you overwrite it.
 - **What it is**: product purpose, users, and what "launch" means for it, as far as the repo tells you.
 - **Stack**: languages, frameworks, datastores, key dependencies, and how it deploys (infra-as-code, CI/CD, containers).
 - **Commands**: exact test, lint, typecheck, and build commands, and whether they pass right now. Run them (in the background while you write the rest). A failing suite is a launch finding in itself, and in fix mode it is the baseline you must not make worse.
@@ -62,6 +63,8 @@ Write `<out>/00-context.md`. Every phase subagent starts by reading this file, s
 - **Known context**: existing docs, ADRs, runbooks, and open TODO/FIXME clusters worth knowing about.
 
 Keep it factual and short (roughly one to two screens). It's a briefing, not a finding.
+
+`rerun=verify`: keep the old file and update only the Snapshot and the Commands results. Nothing else needs rediscovering.
 
 ## Step 3: run the phases in parallel
 
@@ -96,6 +99,7 @@ You are running phase <#>/8 (<key>) of a product launch-readiness review of the 
    - report: every fix is a recommendation.
    - fix: give findings that meet "Safe fixes" in report-format.md the status `open (safe fix)`, with a Fix precise enough to apply without re-investigating.
 6. Write <out>/<file> exactly per report-format.md, with IDs <prefix>-001, <prefix>-002, …
+   Rerun: <out>/<file> already exists from the run on <previous date> (<previous SHA>). Before looking for new findings, re-check every finding in it that isn't `done`. Fixed in the code now → set Status `done`, add a **Resolved** line (date, and the commit or evidence), and move it to the "Done" section. Still present → keep its ID, refresh location and evidence. Then add new findings with the next free IDs and mark them **New**. Never renumber or reuse an ID: ACTIONS.md links to them.
 7. Repo rules to respect: <summary from 00-context.md>.
 
 Be thorough, but cite only what you verified in the code. Every finding needs a file:line and evidence. If you couldn't check something (no production access, no load-test tooling), list it under "Not verified" instead of guessing.
@@ -104,6 +108,19 @@ Reply with only: counts by severity, the three most important finding IDs with o
 ```
 
 Fill `<skill path>` with this skill's base directory, which is announced when the skill loads.
+
+**`rerun=verify`** uses a shorter brief, and only for phase files that still have findings that aren't `done`. Phases with nothing open are skipped.
+
+```
+Check whether the findings in <out>/<file> from the launch-readiness review on <previous date> (<previous SHA>) are resolved, in the repo at <absolute repo path>, on branch <branch>.
+
+1. Invoke the skill `andrej-karpathy-skills:karpathy-guidelines` with the Skill tool and follow it: verify, don't assume.
+2. Read <out>/00-context.md and <skill path>/references/report-format.md.
+3. For every finding in <out>/<file> that isn't `done`: look at the code at its location and wherever that code may have moved. Fixed → set Status `done`, add a **Resolved** line (date, and the commit or evidence), and move it to the "Done" section. Still present → keep it, refresh location and evidence. Can't tell → keep it open and say why under "Not verified".
+4. Don't look for new findings, don't change IDs, and don't edit any file outside <out>/. Update the summary table and add "Verify-only rerun: no new review" to the header.
+
+Reply with only: done IDs, still-open IDs.
+```
 
 **Phase 8 (shipping) gets one extra instruction**: cover what the other phases don't: rollout strategy, feature flags, rollback plan, migrations, monitoring and alerting, and the launch-day runbook. The go/no-go verdict is not its job; you decide it in step 5 with all findings in hand.
 
@@ -134,12 +151,13 @@ Sequential on purpose: each fix sees the previous one, and test failures trace t
 Read every phase file yourself. Decide the verdict, **Go / Go with conditions / No-go**, from the open findings across all phases: any open Blocker means No-go unless its fix is trivial and owned, in which case Go with conditions. Then write two files.
 
 **`<out>/README.md`**: the entry point for whoever reviews the package. Shape it per `i-have-adhd`: the first lines must say what to do next.
-- **Verdict**, one line with the reason. Directly under it: **Start here**, the top three actions from ACTIONS.md, each with its ID, effort, and a link.
+- **Verdict**, one line with the reason. Directly under it: **Next steps**, the top three open actions from ACTIONS.md, each with its ID, effort, and a link. On a rerun, rebuild this list from what is still waiting; never carry over a step that is now `done`.
+- **Since last run** (rerun only): one line, e.g. "Since 2026-09-01: 7 done, 3 new, 12 still open". List the done IDs below it.
 - Executive summary, one short paragraph.
 - Blockers: every open Blocker, linked to its phase file.
 - Scorecard: one row per phase with counts by severity and a one-line headline.
 - Files: what each file in the folder is for.
-- Method: scope, mode, commit SHA, phases skipped or degraded and why, behavior skills that were missing.
+- Method: scope, mode, commit SHA, phases skipped or degraded and why, behavior skills that were missing. For `rerun=verify`, say that no new review ran, so issues introduced since the last full run (name its date and SHA) aren't covered.
 
 **`<out>/ACTIONS.md`**: a single checklist ordered by severity, then by effort (cheap fixes first within each severity). One line per finding, linked to where it is described:
 ```
@@ -147,13 +165,15 @@ Read every phase file yourself. Decide the verdict, **Go / Go with conditions / 
 ```
 Phases ran in parallel, so they will overlap. Where several phases flagged the same underlying problem, merge them into one line that lists all their IDs, at the highest severity among them. In fix mode, add a "Fixed on this branch" section listing the IDs fixed and the files touched.
 
+On a rerun, rebuild ACTIONS.md from the refreshed phase files: open items in the order above (mark new ones **New**), then a "Done" section at the bottom with every `done` item as `- [x]` plus its resolved date. A line that merged several IDs is done only when all of them are.
+
 ## Step 6: hand off
 
 1. Run the test and lint commands one last time (fix mode) and confirm the results are no worse than the baseline in `00-context.md`.
 2. Show `git status` and `git diff --stat`.
 3. **Don't commit or push** unless the user says to. Many repos require review before committing, and the user should look at the package first.
 4. Write the final message per `i-have-adhd`:
-   1. First line: the verdict and the Blocker count.
+   1. First line: the verdict and the Blocker count. On a rerun, add the done / new / still-open counts.
    2. The top three actions, numbered, each with its ID and effort.
    3. Where the package lives, and anything that was skipped or couldn't be verified (at most five items).
    4. Last line: one concrete next action, e.g. "Next: open `<out>/README.md`" or "Next: say *commit* and I'll commit the docs (and, in fix mode, the fixes as one commit per phase), following the repo's commit conventions."

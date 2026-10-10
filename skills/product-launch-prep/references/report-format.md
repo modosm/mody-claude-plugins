@@ -42,10 +42,15 @@ When unsure between two levels, pick the higher one and say why in "Why it matte
 - **Why it matters**: <the concrete failure at launch, e.g. credential stuffing locks out real users and burns DB CPU>
 - **Fix**: <specific change: what to add or edit and where; a short snippet if it helps>
 - **Effort**: S
-- **Status**: open | open (safe fix) | fixed on branch | needs decision
+- **Status**: open | open (safe fix) | fixed on branch | needs decision | done
+- **New** / **Resolved**: <rerun only: "New" on findings first seen in this run; "Resolved: <date>, <commit or evidence>" on done ones>
 - **Related**: <IDs from other phases, if any>
 
 <…more findings, ordered Blocker → High → Medium → Low…>
+
+## Done
+
+<Rerun only: findings from earlier runs that are now fixed, as full finding blocks with Status `done` and a Resolved line, so their anchors keep working. Write "None" on a first run.>
 
 ## Applied changes
 
