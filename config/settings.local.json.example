@@ -1,0 +1,10 @@
+{
+  "extraKnownMarketplaces": {
+    "mody": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/foo/mody-claude-plugins"
+      }
+    }
+  }
+}
