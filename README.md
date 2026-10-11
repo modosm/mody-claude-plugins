@@ -28,6 +28,22 @@ Missing ones degrade gracefully (the phase runs from first principles and says s
 
 `hooks/hooks.json` tells Claude, on every new session (and `/clear`), to load `ponytail`, `karpathy-guidelines` and `using-agent-skills` via the Skill tool before its first reply. `i-have-adhd` disables model invocation, so the hook `cat`s its SKILL.md into context instead. Edit the list there.
 
+## User config
+
+`config/` holds my user-scope Claude Code config:
+
+- `settings.json`: plugins, marketplaces, model, permissions, sandbox. Committed.
+- `settings.local.json`: personal values (the local `mody` marketplace path). Gitignored. Wins over `settings.json`.
+- `CLAUDE.md`: global instructions. `~/.claude/CLAUDE.md` symlinks here. It `@`-imports `config/anti-ai-writing-style.md` and `config/git-workflow.md` via `~/github/mody-claude-plugins/`, so keep the clone there or edit those paths.
+
+After editing either settings file, and once on a new machine:
+
+```bash
+config/install.sh
+```
+
+Run it from your own terminal, not through Claude: Claude Code deletes `~/.claude/settings.json` when its Bash tool writes it. It merges both into `~/.claude/settings.json`, keeping the old file as `settings.json.bak`. Changes Claude Code makes itself (`/config`, "always allow") go to `~/.claude/settings.json`; copy any you want to keep into `config/` before rerunning, or they are overwritten. On a new machine, create `config/settings.local.json` with the `mody` marketplace pointing at your clone; if a plugin doesn't load, run the install commands above.
+
 ## Use
 
 ```
