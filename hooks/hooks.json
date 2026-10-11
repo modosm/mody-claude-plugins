@@ -1,0 +1,19 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Session startup: before replying to the first user message, invoke these skills with the Skill tool, in order: ponytail:ponytail, andrej-karpathy-skills:karpathy-guidelines, agent-skills:using-agent-skills. Skip any that are not installed. i-have-adhd mode is already active (injected below). Then handle the message.'"
+          },
+          {
+            "type": "command",
+            "command": "f=$(ls ~/.claude/plugins/cache/i-have-adhd/i-have-adhd/*/skills/i-have-adhd/SKILL.md 2>/dev/null | sort -V | tail -1); [ -n \"$f\" ] && cat \"$f\" || true"
+          }
+        ]
+      }
+    ]
+  }
+}

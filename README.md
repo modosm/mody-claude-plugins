@@ -24,6 +24,10 @@ claude plugin marketplace add ayghri/i-have-adhd && claude plugin install i-have
 
 Missing ones degrade gracefully (the phase runs from first principles and says so).
 
+## Session-start hook
+
+`hooks/hooks.json` tells Claude, on every new session (and `/clear`), to load `ponytail`, `karpathy-guidelines` and `using-agent-skills` via the Skill tool before its first reply. `i-have-adhd` disables model invocation, so the hook `cat`s its SKILL.md into context instead. Edit the list there.
+
 ## Use
 
 ```
