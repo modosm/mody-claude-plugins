@@ -116,7 +116,9 @@ established one — consistency lets multiple handoffs for the same effort sit
 together.
 
 Name the file `handoff-<YYYY-MM-DD>.md`. If a handoff already exists for today in
-that folder, append `-HHMM` so you never silently overwrite a prior handoff.
+that folder, append `-HHMM`; if that name is taken too, add `-2`, `-3`, and so
+on. Check whether each candidate path exists before writing so you never
+silently overwrite a prior handoff.
 
 If no `OUTPUTS/` folder is reachable (no connected directory), fall back to the
 working outputs folder and tell the user where you put it and that they should

@@ -21,6 +21,7 @@ Apply in order. The first hard fail decides it.
 | Day rate under the decline threshold | Decline. Not a haggle. |
 | Requires relocation | Decline. |
 | Remote B2B, at or above floor | Engage — draft a reply that takes the call |
+| Remote B2B, between the decline threshold and the floor | Negotiate. Ask for the client's maximum budget before naming a number; if it stays under the floor, name the floor and decline |
 | Remote B2B, rate not stated | Engage, and make them state their band first |
 | Leadership scope (Head of / Director) | Engage even if the rate framing is unusual — different pricing world, reopen the number |
 
