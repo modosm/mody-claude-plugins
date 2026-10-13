@@ -6,6 +6,7 @@ Personal Claude Code plugin `mody`. Each skill is invoked as `/mody:<skill>` in 
 |---|---|
 | `product-launch-prep` | Launch-readiness review: branch, 8 parallel review phases, findings + go/no-go in `docs/product-launch-prep/` |
 | `linkedin-recruiter-reply` | Triage a recruiter message against my rate floor, work format and career goals, then draft the reply. Reads private numbers from `config/recruiter-profile.local.md` (gitignored; on a new machine copy `skills/linkedin-recruiter-reply/recruiter-profile.example.md` there and fill it in) |
+| `session-handoff` | Write a handoff `.md` so a fresh session can pick up the work without re-deriving it |
 
 ## Install (once per machine)
 
