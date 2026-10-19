@@ -1,2 +1,4 @@
 .DS_Store
 /.claude
+/config/settings.local.json
+/config/recruiter-profile.local.md
