@@ -5,6 +5,8 @@ Personal Claude Code plugin `mody`. Each skill is invoked as `/mody:<skill>` in 
 | Skill | What it does |
 |---|---|
 | `product-launch-prep` | Launch-readiness review: branch, 8 parallel review phases, findings + go/no-go in `docs/product-launch-prep/` |
+| `linkedin-recruiter-reply` | Triage a recruiter message against my rate floor, work format and career goals, then draft the reply. Reads private numbers from `config/recruiter-profile.local.md` (gitignored; on a new machine copy `skills/linkedin-recruiter-reply/recruiter-profile.example.md` there and fill it in) |
+| `session-handoff` | Write a handoff `.md` so a fresh session can pick up the work without re-deriving it |
 
 ## Install (once per machine)
 
@@ -26,7 +28,7 @@ Missing ones degrade gracefully (the phase runs from first principles and says s
 
 ## Session-start hook
 
-`hooks/hooks.json` tells Claude, on every new session (and `/clear`), to load `ponytail`, `karpathy-guidelines` and `using-agent-skills` via the Skill tool before its first reply. `i-have-adhd` disables model invocation, so the hook `cat`s its SKILL.md into context instead. Edit the list there.
+`hooks/hooks.json` tells Claude, on every new session (and `/clear`), to load `ponytail`, `karpathy-guidelines` and `using-agent-skills` via the Skill tool before its first reply. `i-have-adhd` disables model invocation, so the hook `cat`s its SKILL.md into context instead. Claude's first reply opens with a "Skills loaded: ..." line and names any skill that failed to load. Edit the list there.
 
 ## User config
 
