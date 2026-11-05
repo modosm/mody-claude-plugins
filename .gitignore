@@ -1,4 +1,5 @@
 .DS_Store
 /.claude
-/config/settings.local.json
-/config/recruiter-profile.local.md
+# Private values: any file with .local. in its name. Templates end in .example and stay tracked.
+*.local.*
+!*.example
