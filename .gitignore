@@ -1,5 +1,5 @@
 .DS_Store
 /.claude
-# Private values. Templates are *.example.md / *.local.json.example and stay tracked.
-*.local.md
-*.local.json
+# Private values: any file with .local. in its name. Templates end in .example and stay tracked.
+*.local.*
+!*.example
