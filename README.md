@@ -7,6 +7,7 @@ Personal Claude Code plugin `mody`. Each skill is invoked as `/mody:<skill>` in 
 | `product-launch-prep` | Launch-readiness review: branch, 8 parallel review phases, findings + go/no-go in `docs/product-launch-prep/` |
 | `linkedin-recruiter-reply` | Triage a recruiter message against my rate floor, work format and career goals, then draft the reply. Reads private numbers from `config/recruiter-profile.local.md` (gitignored; on a new machine copy `skills/linkedin-recruiter-reply/recruiter-profile.example.md` there and fill it in) |
 | `session-handoff` | Write a handoff `.md` so a fresh session can pick up the work without re-deriving it |
+| `plan-weekly-meals` | Build a 7-day lunch/dinner plan from a weekly menu PDF against my calorie, protein and dietary rules. Reads them from `config/meal-preferences.local.md` (gitignored; on a new machine copy `skills/plan-weekly-meals/meal-preferences.example.md` there and fill it in) |
 
 ## Install (once per machine)
 
