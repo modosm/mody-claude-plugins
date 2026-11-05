@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'Session startup: before replying to the first user message, invoke these skills with the Skill tool, in order: ponytail:ponytail, andrej-karpathy-skills:karpathy-guidelines, agent-skills:using-agent-skills. Start that first reply with one line confirming what loaded, e.g. \"Skills loaded: ponytail, karpathy-guidelines, using-agent-skills, i-have-adhd.\" If a Skill call fails, a skill is not installed, or i-have-adhd reports a load failure below, add \"FAILED: <skill> (<reason>)\" to that line for each one. Never skip a failure silently. Then handle the message.'"
+            "command": "echo 'Session startup: before replying to the first user message, invoke these skills with the Skill tool, in order: ponytail:ponytail, andrej-karpathy-skills:karpathy-guidelines, agent-skills:using-agent-skills, chat-status. Start that first reply with one line confirming what loaded, e.g. \"Skills loaded: ponytail, karpathy-guidelines, using-agent-skills, chat-status, i-have-adhd.\" If a Skill call fails, a skill is not installed, or i-have-adhd reports a load failure below, add \"FAILED: <skill> (<reason>)\" to that line for each one. Never skip a failure silently. Then handle the message.'"
           },
           {
             "type": "command",
