@@ -1,6 +1,6 @@
 {
   "name": "mody",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Máté Módos's personal Claude Code skills.",
   "author": { "name": "Máté Módos" },
   "skills": "./skills"
