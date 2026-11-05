@@ -26,9 +26,15 @@ claude plugin marketplace add ayghri/i-have-adhd && claude plugin install i-have
 
 Missing ones degrade gracefully (the phase runs from first principles and says so).
 
+The session-start hook also loads `chat-status` (colored status circle in front of each chat title). It ships as a plain skill, not a plugin, so copy it into `~/.claude/skills/` (reviewed at commit `a2d4f73`):
+
+```bash
+git clone --depth 1 https://github.com/frkandris/ai-colored-chat-status.git && mkdir -p ~/.claude/skills && cp -R ai-colored-chat-status/chat-status ~/.claude/skills/ && rm -rf ai-colored-chat-status
+```
+
 ## Session-start hook
 
-`hooks/hooks.json` tells Claude, on every new session (and `/clear`), to load `ponytail`, `karpathy-guidelines` and `using-agent-skills` via the Skill tool before its first reply. `i-have-adhd` disables model invocation, so the hook `cat`s its SKILL.md into context instead. Claude's first reply opens with a "Skills loaded: ..." line and names any skill that failed to load. Edit the list there.
+`hooks/hooks.json` tells Claude, on every new session (and `/clear`), to load `ponytail`, `karpathy-guidelines`, `using-agent-skills` and `chat-status` via the Skill tool before its first reply. The per-turn `chat-status` rules live in `config/CLAUDE.md`. `i-have-adhd` disables model invocation, so the hook `cat`s its SKILL.md into context instead. Claude's first reply opens with a "Skills loaded: ..." line and names any skill that failed to load. Edit the list there.
 
 ## User config
 
